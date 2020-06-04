@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="__STATIC__/plugins/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__STATIC__/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="__STATIC__/plugins/layui/css/layui.css">
+    <link rel="stylesheet" href="__CSS__/login.css">
+</head>
+<body>
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <div class="login100-form-title" style="background-image: url(__STATIC__/img/login_bg.jpg);">
+					<span class="login100-form-title-1">
+						Sign In
+					</span>
+            </div>
+
+            <form method="post" action="" class="login100-form validate-form" id="loginform">
+                {:token()}
+                <div class="wrap-input100 validate-input m-b-26">
+                    <span class="label-input100">Username</span>
+                    <input class="input100 username" type="text" name="username" placeholder="请输入用户名">
+                    <span class="focus-input100"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-18">
+                    <span class="label-input100">Password</span>
+                    <input class="input100 password" type="password" name="password" placeholder="请输入密码">
+                    <span class="focus-input100"></span>
+                </div>
+
+                <div class="flex-sb-m w-full p-b-30">
+                    <div class="contact100-form-checkbox">
+                        <input class="input-checkbox100" id="keeplogin" type="checkbox" name="keeplogin">
+                        <label class="label-checkbox100" for="keeplogin">
+                            保持登录
+                        </label>
+                    </div>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button type="button" class="login100-form-btn" id="loginBtn">
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="__STATIC__/plugins/jquery/dist/jquery.min.js"></script>
+<script src="__STATIC__/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="__STATIC__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__STATIC__/plugins/layui/layui.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        //表单验证控件
+        $("#loginform").validate({
+            errorElement: "span",
+            errorClass: "alert-validate",
+            errorPlacement: function(error, element) {
+                $( element ).parent().append( error );
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            onfocusout: function(element) { $(element).valid(); },
+            rules : {
+                user_name: "required",
+                user_psw: "required"
+            },
+            messages:{
+                username:{
+                    required:"请输入用户名"
+                },
+                password:{
+                    required:"请输入密码"
+                },
+            }
+        });
+
+        layui.use('layer', function(){
+            layer = layui.layer;
+        });
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function() {
+            var formData = $("#loginform").serialize();
+            $.ajax({
+                type: "POST",
+                url: "{:url('Index/login')}",
+                data: formData,
+                dataType:"json",
+                success: function(result) {
+                    if (result.code == 1) {
+                        layer.msg(result.msg, {icon: 1})
+                        location.href = "{:url('Dashboard/index')}"
+                    } else {
+                        layer.msg(result.msg, {icon: 2})
+                        $('[name="__token__"]').val(result.data.token)
+                    }
+                }
+            });
+        }
+    });
+
+    // iso safari 禁止缩放
+    document.addEventListener('touchstart',function (event) {
+        if(event.touches.length>1){
+            event.preventDefault();
+        }
+    })
+    var lastTouchEnd=0;
+    document.addEventListener('touchend',function (event) {
+        var now=(new Date()).getTime();
+        if(now-lastTouchEnd<=300){
+            event.preventDefault();
+        }
+        lastTouchEnd=now;
+    },false);
+
+    // 登录
+    $('#loginBtn').click(function(){
+        $("#loginform").submit();
+    });
+    // 登录键盘事件
+    $(document).keydown(function(e){
+        if (e.keyCode == 13) {
+            e.cancelBubble = true;
+            e.returnValue = false;
+            $("#loginform").submit();
+        }
+    });
+</script>
+</body>
+</html>

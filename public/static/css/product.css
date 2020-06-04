@@ -1,0 +1,63 @@
+.ibox {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #dee5e7;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+.ibox h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.ibox-content {
+    background-color: #ffffff;
+    color: inherit;
+    padding: 15px 20px 20px 20px;
+    border-color: #e7eaec;
+    -webkit-border-image: none;
+    -o-border-image: none;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 0px;
+}
+.ibox-list {
+    margin: 10px 0;
+    height: 74vh;
+    overflow-y: scroll;
+    cursor: pointer;
+}
+.sortable-list {
+    min-height: 100%;
+}
+.agile-list li {
+    color: #676a6c;
+    background: #FAFAFB;
+    border: 1px solid #e7eaec;
+    margin: 0px 0 10px 0;
+    padding: 6px;
+    border-radius: 2px;
+}
+.agile-list li.success-element {
+    border-left: 3px solid #23b7e5;
+}
+.agile-list li.warning-element {
+    border-left: 3px solid #f8ac59;
+}
+.agile-detail {
+    margin-top: 5px;
+    font-size: 12px;
+}
+.btn-white {
+    background: #fff;
+    border: 1px solid #e7eaec;
+}
+.element {
+    display: flex;
+    align-items: center;
+}
+.element-icon {
+    width: 50px;
+    margin-right: 10px;
+}

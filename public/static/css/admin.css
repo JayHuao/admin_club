@@ -1,0 +1,208 @@
+/* dt样式 */
+table.dataTable tbody tr.selected {
+     /*background-color: #B0BED9;*/
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-name: breathe;
+    -webkit-animation-duration: 1500ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+}
+
+@-webkit-keyframes breathe {
+    0% {
+        box-shadow: 0 1px 1px rgba(0, 147, 223, 0.4), 0 1px 1px rgba(0, 147, 223, 0.2) inset;
+    }
+    100% {
+        box-shadow: 0 2px 2px #0093df, 0 2px 2px #0093df inset;
+    }
+}
+
+table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected{
+
+}
+
+.table tr{
+    cursor: pointer;
+}
+.table th{
+    text-align: left;
+}
+.table td{
+    vertical-align: middle !important;
+}
+.table a {
+    text-decoration: underline;
+}
+.table .label {
+    display: inline-block;
+}
+.table .img-thumbnail{
+    border: none;
+}
+.search-box{
+    border-radius: 3px;
+    margin: 0 0 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+.search-box .layui-input{
+    height: 34px;
+}
+.search-box label{
+    color: #FFF;
+}
+
+/* input */
+input[readonly] {
+    cursor: pointer;
+}
+.dt-input{
+    width: 30px;
+    text-align: center;
+    border: 1px solid #DDD;
+}
+/* ellipsis */
+.dt-ellipsis{
+    overflow: hidden;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.lightbox, .swal2-container {
+    z-index: 999999999;
+}
+
+.box {
+    margin-bottom: 0;
+}
+
+/* dt搜索 */
+
+.search-item {
+    text-align: right;
+}
+
+#searchCollapse {
+    margin-top: 10px;
+}
+
+#searchCollapse .form-group {
+    margin-right: 5px;
+}
+
+/* layui */
+.layui-form-label{
+    width: 100px;
+}
+.layui-inline .layui-form-label {
+    width: auto;
+}
+.layui-layer-content .layui-form{
+    padding: 20px;
+}
+.layui-form-select .layui-anim {
+    width: 100%;
+}
+.layui-form-select dl{
+    max-height: 220px;
+}
+
+/* tagsinput */
+.layui-form .bootstrap-tagsinput{
+    width: 100%;
+    line-height: 28px;
+    border: 1px solid #E6E6E6;
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+/* multiselect */
+.multiselect-header{
+    text-align: center;
+    color: #FFF;
+    background: #3c8dbc;
+    cursor: pointer;
+    line-height: 1.8;
+    border-radius: 3px;
+    margin-top: 3px;
+}
+
+
+/* fileinput */
+#kvFileinputModal{
+    z-index: 19999999;
+}
+
+.text-ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+}
+
+/* detail */
+.detail-item{
+    padding: 20px;
+    font-size: 20px;
+    color: #A7A7A7;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+/*
+ * Skin: Blue
+ */
+.skin-blue .layui-btn-normal,
+.skin-blue .layui-form-select dl dd.layui-this,
+.skin-blue .layui-form-checked[lay-skin=primary] i,
+.skin-blue .bootstrap-tagsinput .label,
+.skin-blue ::-webkit-scrollbar-thumb,
+
+.skin-blue-light .layui-layer-title,
+.skin-blue-light .layui-btn-normal,
+.skin-blue-light .layui-form-select dl dd.layui-this,
+.skin-blue-light .layui-form-checked[lay-skin=primary] i,
+.skin-blue-light .bootstrap-tagsinput .label,
+.skin-blue-light ::-webkit-scrollbar-thumb{
+    background-color: #3c8dbc;
+    color: #FFF;
+}
+.skin-blue .search-box,
+.skin-blue-light .search-box{
+    background-color: #3c8dbc;
+    border-color: #0a6396;
+}
+.skin-blue .layui-form-radioed i,
+.skin-blue .layui-form-radio i:hover,
+.skin-blue-light .layui-form-radioed i,
+.skin-blue-light .layui-form-radio i:hover{
+    color: #3c8dbc;
+}
+.skin-blue .layui-form-checkbox[lay-skin=primary]:hover i,
+.skin-blue .layui-form-checked[lay-skin=primary] i,
+.skin-blue-light .layui-form-checkbox[lay-skin=primary]:hover i,
+.skin-blue-light .layui-form-checked[lay-skin=primary] i{
+    border-color: #3c8dbc;
+}
+
+.navbar-nav>.user-menu>.dropdown-menu{
+    width: 180px;
+}
+.navbar-nav>.user-menu>.dropdown-menu>.user-footer{
+    padding: 0;
+}
+.dropdown-menu>li>a{
+    padding: 12px 10px 12px 15px;
+}

@@ -1,0 +1,216 @@
+{extend name="layout/default" /}
+{block name="title"}
+    管理员 <small>列表</small>
+{/block}
+{block name="css"}
+    <link rel="stylesheet" href="__STATIC__/plugins/multiselect/css/multi-select.css">
+{/block}
+{block name="main"}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <button type="button" class="btn btn-default" id="add"><i class="fa fa-plus fa-fw"></i>添加</button>
+                <button type="button" class="btn btn-default" id="edit"><i class="fa fa-edit fa-fw"></i>编辑</button>
+                <button type="button" class="btn btn-default" id="rule"><i class="fa fa-unlock-alt fa-fw"></i>权限</button>
+                <button type="button" class="btn btn-default" id="delete"><i class="fa fa-trash-o fa-fw"></i>删除</button>
+            </h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered table-hover table-single">
+                <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>姓名</th>
+                        <th>用户组</th>
+                        <th>工号</th>
+                        <th>年龄</th>
+                        <th>性别</th>
+                        <th width="60">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/html" id="actionModal">
+        <form class="layui-form" id="actionForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">工号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="no" placeholder="请输入工号" autocomplete="off" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="nickname" placeholder="请输入姓名" autocomplete="off" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年龄</label>
+                <div class="layui-input-block">
+                    <input type="number" name="age" placeholder="请输入年龄" autocomplete="off" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="男" title="男" checked>
+                    <input type="radio" name="sex" value="女" title="女">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" value="{:config('STATUS_Y')}" title="启用" checked>
+                    <input type="radio" name="status" value="{:config('STATUS_B')}" title="禁用">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id">
+        </form>
+    </script>
+    <script type="text/html" id="ruleModal">
+        <form class="layui-form" id="actionForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">管理组</label>
+                <div class="layui-input-block">
+                    <select multiple="multiple" id="multiSelect" name="groups[ ]" lay-ignore>
+                        {foreach $groups as $group}
+                            <option value="{$group.id}">{$group.title}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="ruleSubmit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id">
+        </form>
+    </script>
+{/block}
+{block name="js"}
+    <script src="__STATIC__/plugins/multiselect/js/jquery.multi-select.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            oTable = $(".table").DataTable({
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>> t <'row'<'col-sm-6'i><'col-sm-6'p>>",
+                serverSide: false,
+                searching: true,
+                ordering: false,
+                paging: false,
+                scrollY: dtHeight,
+                scrollCollapse: true,
+                ajax: "{:url('auth.Admin/get_dt_list')}",
+                columns: [
+                    { "data": "username" },
+                    { "data": "nickname" },
+                    { "data": "groups_text" },
+                    { "data": "no" },
+                    { "data": "age" },
+                    { "data": "sex" },
+                    DT.COLUMN.STATUS,
+                ]
+            });
+        });
+
+        /************************* document ready end *****************************/
+
+        layui.use(['layer', 'form'], function() {
+            var layer = layui.layer,
+                form = layui.form;
+
+            // 添加
+            $('#add').on('click', function() {
+                layui_form('添加管理员', function () {
+                    $('#multiSelect').multiSelect({
+                        selectableFooter: "<div id='selectAll' class='multiselect-header'>全选</div>",
+                        selectionFooter: "<div id='unSlectAll' class='multiselect-header'>取消全选</div>"
+                    });
+                }, '600px');
+                form.render();
+            });
+
+            // 编辑
+            $('#edit').on('click', function() {
+                getSelectedData(oTable, function(data){
+                    layui_form('修改管理员信息', function(){
+                        dataToForm('actionForm', data);
+                    }, '500px');
+                    form.render();
+                });
+            });
+
+            // 权限
+            $('#rule').on('click', function() {
+                getSelectedData(oTable, function(data){
+                    layui_form('修改管理员权限', function(){
+                        dataToForm('actionForm', data);
+                        $('#multiSelect').multiSelect({
+                            selectableFooter: "<div id='selectAll' class='multiselect-header'>全选</div>",
+                            selectionFooter: "<div id='unSlectAll' class='multiselect-header'>取消全选</div>"
+                        });
+                        $('#multiSelect').multiSelect('select', data.groups_arr);
+                    }, '600px', 'ruleModal');
+                    form.render();
+                });
+            });
+
+            // 基本信息
+            form.on('submit(submit)', function(data) {
+                if ($('[name="id"]').val()) {
+                    submit_form("{:url('auth.Admin/edit')}");
+                } else {
+                    submit_form("{:url('auth.Admin/add')}");
+                }
+            });
+            // 权限
+            form.on('submit(ruleSubmit)', function(data) {
+                submit_form("{:url('auth.Admin/edit_rule')}");
+            });
+        });
+
+        // 删除
+        $('#delete').on('click', function() {
+            getSelectedData(oTable, function(data){
+                set_status('确认删除管理员 '+data.username, "{:url('auth.Admin/delete')}", {
+                    id: data.id,
+                });
+            });
+        });
+    </script>
+{/block}

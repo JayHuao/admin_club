@@ -1,0 +1,148 @@
+{extend name="layout/default" /}
+{block name="title"}
+    社团申请 <small></small>
+{/block}
+{block name="css"}
+
+{/block}
+{block name="main"}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <button type="button" class="btn btn-default" id="add"><i class="fa fa-plus fa-fw"></i>添加</button>
+                <button type="button" class="btn btn-default" id="edit"><i class="fa fa-edit fa-fw"></i>编辑</button>
+                <button type="button" class="btn btn-default" id="delete"><i class="fa fa-trash-o fa-fw"></i>删除</button>
+            </h3>
+
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered table-hover table-single">
+                <thead>
+                    <tr>
+                        <th>社团</th>
+                        <th>职工</th>
+                        <th>申请时间</th>
+                        <th width="60">状态</th>
+                        <th width="60">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/html" id="actionModal">
+        <form class="layui-form" id="actionForm">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属社团</label>
+                <div class="layui-input-block">
+                    <select name="club_id">
+                        <option value=""></option>
+                        {foreach $club as $vo}
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="submit">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <input type="hidden" name="id">
+        </form>
+    </script>
+{/block}
+{block name="js"}
+    <script src="__STATIC__/plugins/multiselect/js/jquery.multi-select.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            oTable = $(".table").DataTable({
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>> t <'row'<'col-sm-6'i><'col-sm-6'p>>",
+                serverSide: false,
+                searching: true,
+                paging: false,
+                scrollY: dtHeight,
+                scrollCollapse: true,
+                ajax: "{:url('apply.Club/get_dt_list')}",
+                columns: [
+                    { "data": "club" },
+                    { "data": "admin" },
+                    { "data": "apply_time" },
+                    DT.COLUMN.APPLY,
+                    {
+                        "data": "status",
+                        "render": function(data) {
+                            if (data == 3) {
+                                return '<a href="javascript:;" id="reason">原因</a>'
+                            } else {
+                                return '/'
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+
+        /************************* document ready end *****************************/
+
+        layui.use(['layer', 'form'], function() {
+            var layer = layui.layer,
+                form = layui.form;
+
+            // 添加
+            $('#add').on('click', function() {
+                layui_form('添加社团信息',function(){
+
+                },['500px','300px']);
+                form.render();
+            });
+
+            // 编辑
+            $('#edit').on('click', function() {
+                getSelectedData(oTable, function(data){
+                    layui_form('修改社团信息', function(){
+                        dataToForm('actionForm', data);
+                    });
+                    form.render();
+                });
+            });
+
+            form.on('submit(submit)', function(data) {
+                if ($('[name="id"]').val()) {
+                    submit_form("{:url('apply.Club/edit')}");
+                } else {
+                    submit_form("{:url('apply.Club/add')}");
+                }
+            });
+        });
+
+        // 删除
+        $('#delete').on('click', function() {
+            getSelectedData(oTable, function(data){
+                set_status('确认删除社团 '+data.club+' 申请？', "{:url('apply.Club/delete')}", {
+                    id: data.id,
+                });
+            });
+        });
+        // 驳回原因
+        $('.table').on('click', '#reason', function() {
+            getSelectedData(oTable, function(data){
+                swal(data.remark)
+            });
+        });
+    </script>
+{/block}
